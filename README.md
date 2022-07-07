@@ -8,7 +8,7 @@ Implementing a **fullstack app with [Next.js](https://nextjs.org/)** using [Reac
 
 Install npm dependencies:
 ```
-cd rest-nextjs
+cd pcarrer
 npm install
 ```
 
