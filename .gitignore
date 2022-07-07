@@ -1,0 +1,6 @@
+node_modules/
+.next/
+.swc/
+migrations/
+dev.db
+package-lock.json
