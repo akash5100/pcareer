@@ -22,9 +22,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
           throw err;
         } else {
           console.log("Table created.");
-          var insert = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
-          db.run(insert, ["admin", "admin@example.com", md5("strong_password")]);
-          db.run(insert, ["user", "user@example.com", md5("weak_password")]);
         }
       };
   }

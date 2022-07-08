@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/akash5100/pcarrer#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "md5": "^2.3.0",
     "nodemon": "^2.0.19",

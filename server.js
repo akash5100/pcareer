@@ -2,8 +2,9 @@ var express = require("express");
 var db = require("./database");
 var bodyParser = require("body-parser");
 var md5 = require("md5");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 var bodyParser = require("body-parser");
 
 var app = express();
@@ -24,8 +25,9 @@ var validateRequest = (req, res) => {
   }
   if (error.length) {
     res.status(400).json({ error: error.join(", ") });
-    return;
+    return false;
   }
+  return true;
 };
 
 app.listen(PORT, () => {
@@ -71,7 +73,10 @@ app.get("/users/:id", (req, res, _next) => {
 
 // Create a new user
 app.post("/create/users", (req, res, _next) => {
-  validateRequest(req, res);
+  const Valid = validateRequest(req, res);
+  if (!Valid) {
+    return;
+  }
   var data = {
     name: req.body.name,
     email: req.body.email,
@@ -96,8 +101,10 @@ app.post("/create/users", (req, res, _next) => {
 
 // Update a user by id
 app.patch("/update/users/:id", (req, res, _next) => {
-  validateRequest(req, res);
-
+  const Valid = validateRequest(req, res);
+  if (!Valid) {
+    return;
+  }
   var data = {
     name: req.body.name,
     email: req.body.email,
