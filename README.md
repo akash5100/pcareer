@@ -2,46 +2,35 @@
 
 You can use the REST API to access the data in the database.
 
-#### **GET**
+#### 1. **GET** Endpoints
 
-    ```
-    GET /
-    ```
+
+- **`GET /`**
 
     Returns status of the server.
 
-    ```
-    GET /users
-    ```
+- **`GET /users`**
 
     Returns a list of all users.
 
-    ```
-    GET /users/:id
-    ```
+- **`GET /users/:id`**
 
     Returns a user with the given id.
 
-#### **POST**
+#### 2. **POST** Endpoints
 
-    ```
-    POST /create/users
-    ```
+- **`POST /create/users`**
 
     Creates a new user.
 
-#### **PATCH**
+#### 3. **PATCH** Endpoints
 
-    ```
-    PATCH /update/users/:id
-    ```
+- **`PATCH /update/users/:id`**
 
     Updates a user with the given id.
 
-#### **DELETE**
+#### 4. **DELETE** Endpoints
 
-    ```
-    DELETE /delete/users/:id
-    ```
+- **`DELETE /delete/users/:id`**
 
     Deletes a user with the given id.
