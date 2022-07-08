@@ -4,3 +4,5 @@ node_modules/
 migrations/
 dev.db
 package-lock.json
+db.sqlite
+.env
