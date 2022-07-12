@@ -1,4 +1,4 @@
-export const validateRequest = (req, res) => {
+export default function validateRequest(req, res){
     var error = [];
     if (!req.body.name) {
       error.push("Name is required");
