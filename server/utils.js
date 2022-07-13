@@ -27,11 +27,15 @@ export function validateScores(req, res) {
   if (!req.body.final) {
     error.push("Final is required");
   }
-  if (!req.body.user_id) {
-    error.push("User ID is required");
-  }
   if (error.length) {
     res.status(400).json({ error: error.join(", ") });
+    return false;
+  }
+  return true;
+}
+
+export function validateSubject(subject) {
+  if (subject !== "os" && subject !== "dbms" && subject !== "dsa" && subject !== "cn" && subject !== "plang") {
     return false;
   }
   return true;

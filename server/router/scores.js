@@ -1,16 +1,23 @@
 import express from "express";
 import db from "../database.js";
-import { validateScores } from "../utils.js";
+import { validateScores, validateSubject } from "../utils.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
   res.status(200).json({
+    status: "Ok",
     message: "This endpoint is used to get/post scores of a user in different subjects.",
   });
 });
 
-router.get("/os", (_req, res, _next) => {
-  db.all(`SELECT * FROM os`, (err, rows) => {
+router.get("/:subject", (_req, res, _next) => {
+  const subject = _req.params.subject;
+  if (!validateSubject(subject)) {
+    res.status(400).json({ error: "Invalid subject." });
+    return;
+  }
+
+  db.all(`SELECT * FROM ${subject}`, (err, rows) => {
     if (err) {
       console.error(err.message);
       throw err;
@@ -20,9 +27,14 @@ router.get("/os", (_req, res, _next) => {
   });
 });
 
-router.get("/os/:user_id", (req, res, _next) => {
+router.get("/:subject/:user_id", (req, res, _next) => {
   var params = [req.params.user_id];
   var name = "";
+  const subject = req.params.subject;
+  if (!validateSubject(subject)) {
+    res.status(400).json({ error: "Invalid subject." });
+    return;
+  }
 
   db.get(`SELECT name FROM user WHERE id = ?`, params, (err, row) => {
     if (err) {
@@ -36,7 +48,7 @@ router.get("/os/:user_id", (req, res, _next) => {
     }
   });
 
-  db.all(`SELECT * FROM os WHERE user_id = ?`, params, (err, rows) => {
+  db.all(`SELECT * FROM ${subject} WHERE user_id = ?`, params, (err, rows) => {
     if (err) {
       console.error(err.message);
       throw err;
@@ -49,7 +61,13 @@ router.get("/os/:user_id", (req, res, _next) => {
   });
 });
 
-router.post("/os/:user_id", (req, res, _next) => {
+router.post("/:subject/:user_id", (req, res, _next) => {
+  const subject = req.params.subject;
+  if (!validateSubject(subject)) {
+    res.status(400).json({ error: "Invalid subject." });
+    return;
+  }
+
   const Valid = validateScores(req, res);
   if (!Valid) {
     return;
@@ -60,9 +78,23 @@ router.post("/os/:user_id", (req, res, _next) => {
     final: req.body.final,
     user_id: req.params.user_id,
   };
-  var sql = "INSERT INTO os (ct1, ct2, final, user_id) VALUES (?,?,?,?)";
+
+  var params = [data.user_id];
+  var name = "";
+  db.get(`SELECT name FROM user WHERE id = ?`, params, (err, row) => {
+    if (err) {
+      console.error(err.message);
+      throw err;
+    } else if (row === undefined) {
+      res.status(400).json({ error: "User does not exist." });
+      return;
+    } else {
+      name = row.name;
+    }
+  });
+
   var params = [data.ct1, data.ct2, data.final, data.user_id];
-  db.run(sql, params, function (err, result) {
+  db.run(`INSERT INTO ${subject} (ct1, ct2, final, user_id) VALUES (?,?,?,?)`, params, (err, result) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -70,7 +102,6 @@ router.post("/os/:user_id", (req, res, _next) => {
     res.json({
       message: "Success",
       data: data,
-      id: this.lastID,
     });
   });
 });

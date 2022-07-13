@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   res.status(200).json({
+    status: "Ok",
     message: "This endpoint is for users",
   });
 });
